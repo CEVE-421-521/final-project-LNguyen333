@@ -1,0 +1,804 @@
+---
+title: "Final Project Report: Adding Sequential Analysis to the House Elevation Problem"
+author: "Leanh Nguyen (Ln14)"
+jupyter: julia-1.10
+date: 2024-04-28
+
+format: 
+    html: default
+
+    # YOU DO NOT NEED BOTH PDF AND DOCX.
+    # COMMENT OR DELETE THE ONE YOU DON'T WANT TO USE.
+    # pdf:
+    #     documentclass: article
+    #     fontsize: 11pt
+    #     geometry:
+    #         - margin=1in  
+    #     number-sections: true
+    #     code-line-numbers: true
+    docx: 
+       toc: true
+       fig-format: png
+       number-sections: true
+       code-line-numbers: true
+
+date-format: "ddd., MMM. D"
+references: references.bib
+
+# recommended, but not required
+# you will need jupyter-cache installed
+execute: 
+  cache: true
+---
+
+{{< pagebreak >}}
+
+# Introduction
+
+## Problem Statement
+
+Clearly define the problem statement that your chosen feature aims to address.
+
+Explain the significance of this problem in the context of climate risk management.
+
+With the recent federal infrastructure bill, American cities are set to spend billions to improve their water and flood systems. However, with the growing concern about climate change's impact on infrastructure, climate risk management is coming into the spotlight for future urban planning. However, the question of how to approach climate change forecasts remains in the minds of many researchers. 
+
+In the case of a property elevation problem, we have a property owner who is threatened by sea level rise and wants to elevate their property. However, elevating a house is a costly endeavor, so it is crucial to find the balance between protection and cost. Ideally, they want to minimize costs and maximize benefits (e.g., flood protection, human safety, etc.). A simple model could take the world's current state(s) and a possible decision (i.e., how high to elevate the property) to generate a potential solution for the owner. 
+
+However, in the real world, most decisions made by regular people are not static, but rather sequential. In other words, people can hold off from deciding once they have more information about the world and/or have enough resources to perform an action (e.g., elevating a building). In this case, at each time step, a property owner can make a decision based on the state of the system (e.g., current sea level, current flood distribution, current building elevation, etc.) which can change at each time step. Additionally, in the real world, the property owner would also get some immediate feedback or rewards like the cost of flood insurance and the cost of elevating. 
+
+By applying sequential analysis, we can utilize an adaptive policy that allows the property owner to make more accurate decisions based on the current state of the world, which can reduce costs while maintaining or improving overall benefits. From this, researchers can scale this model up to perform over neighborhoods, cities, and regions which can help property owners make informed decisions on elevating and advise future construction to consider adaptive structures that allow for future modifications and/or elevations. 
+
+## Selected Feature
+
+Describe the feature you have selected to add to the existing decision-support tool.
+
+Discuss how this feature relates to the problem statement and its potential to improve climate risk assessment.
+
+Initial Challenges:
+
+1. Uncertainty: Future sea level rise and storm surge predictions are uncertain.
+1. Static Approach: A traditional, one-time elevation based on initial projections might not be optimal.
+
+Sequential Analysis involves making decisions at multiple periods of time, using data and outcomes observed up to each point to refine and adjust policies. This approach is useful when uncertainties are high and the situation changes over time, a key characteristic of climate change and sea level rise.
+
+Adaptive Policy refers to a strategy designed to be flexible and responsive to changes in the environment or system based on predefined triggers or new information, meaning that the policy can evolve as more information becomes available or as the situation changes.
+
+Feature
+
+1. To apply an adaptive policy, this code will utilize direct policy search, which assumes a specific functional form for a policy 𝜋 with parameters 𝜃 such that 𝑎𝑡 = 𝑓(𝑥𝑡,𝜃). The goal of policy search is to find the parameters 𝜃 that maximize the expected sum of future rewards.
+1. Common choices of 𝑓 include linear decision rules, radial basis functions, binary trees, and neural networks. A primary advantage of policy search is that it can be very flexible and adaptive, and can be used with simulation-optimization frameworks. A primary disadvantage is that it can be computationally expensive and require a lot of data to estimate the parameters.
+    1. Here, I define a buffer height as the minimum tolerable elevation of the house relative to the mean sea level.
+    1. Also, I define a freeboard height, which is an additional heightening built on top of the minimum heightening that would bring the house back to a safe height. A freeboard height is often applied to reduce the probability of needing house elevations in consecutive years since there is an initial cost to start the elevation process and heightenings in consecutive years would be expensive. 
+1. All in all, by considering future conditions and adapting with buffer and freeboard heights, this would provide safer and more robust options and decisions for homeowners with properties in coastal areas, providing more benefits while balancing costs. 
+
+{{< pagebreak >}}
+
+# Literature Review
+
+Provide a brief overview of the theoretical background related to your chosen feature.
+
+Cite at least two relevant journal articles to support your approach (see [Quarto docs](https://quarto.org/docs/authoring/footnotes-and-citations.html) for help with citations).
+
+## [Using direct policy search to identify robust strategies in adapting to uncertain sea-level rise and storm surge](https://doi.org/10.1016/j.envsoft.2018.05.006)
+
+**Summary**
+
+The article explores how computational techniques can be utilized to create effective adaptation strategies for managing risks associated with sea-level rise and storm surge under conditions of uncertainty. The article uses a method called direct policy search, which is a form of reinforcement learning, to find strategies that are robust across a range of uncertain future scenarios.
+
+**Background and Motivation**
+
+1. Sea-Level Rise (SLR) poses significant risks to coastal communities, ecosystems, and infrastructure worldwide. Decision makers have to constantly deal with uncertain SLR projections when designing coastal adaptation strategies and policies.
+1. This paper acknowledges the significant uncertainties involved in predicting sea-level rise and the frequency and intensity of storm surges due to climate change. These uncertainties challenge traditional planning methods that rely on fixed assumptions and deterministic forecasts.
+
+**Direct Policy Search**
+
+![The Direct Policy Search Approach](DPS.jpg)
+
+1. In this paper, DPS is used to explore a wide variety of possible adaptation policies to identify those that perform well across a range of uncertain future scenarios. This approach involves using a simulation model to evaluate the performance of different policy options under various scenarios of sea-level rise and storm surge events. The model uses an optimization algorithm to iteratively improve policy choices by evaluating their effectiveness in minimizing costs and damages across these scenarios.
+1. The study suggests that adaptive policies, which can be adjusted in response to changes in climate conditions and sea-level observations, are generally more robust than static policies.
+1. DPS outperforms the traditional approach in terms of Pareto-dominance (e.g., balancing conflicting objectives). Additionally, DPS provides better solution quality under uncertain sea-level rise projections and storm surge.
+1. Most importantly, the new formulation achieves high-quality solutions with lower computational demands compared to intertemporal optimization methods.
+
+**Significance and Implications**
+1. The study highlights the utility of multi-objective adaptive formulations for coastal adaptation.
+1. Decision makers can use this approach to craft robust strategies that adapt dynamically to changing conditions.
+1. The findings extend beyond coastal adaptation and have broader applications in climate change decision problems.
+1. The concept of Direct Policy Search (DPS) can be directly applied to my house elevation project, especially in managing the risks associated with sea level rise and storm damage. Here is how this approach can enhance decision-making and provide better options for homeowners through policy search and sequential analysis:
+    1. Robust Strategies and Uncertainty:
+        1. The paper emphasizes the need for robust strategies in the face of uncertain future projections.
+        1. Similarly, this project deals with uncertainties related to sea level rise data and storm damage.
+        1. By adopting robust strategies, this project can ensure that homeowners’ safety is prioritized even as conditions evolve.
+    1. Direct Policy Search and Sequential Analysis:
+        1. DPS is a useful approach for finding optimal solutions under uncertainty.
+        1. In this project, sequential analysis plays a crucial role:
+            1. Buffer and Freeboard Heights: Consider buffer and freeboard heights as part of the adaptation policies.
+            1. Incremental Adjustments: The concept of adaptive policies highlighted in the paper suggests that strategies should not be static but adjustable as new data becomes available. In this project, this means setting up a system where buffer and freeboard heights can be modified over time based on ongoing sea-level rise and storm data, similar to how the paper sets up buffer and freeboard heights. Like the paper, this could involve setting predefined triggers that, when reached, would recommend re-evaluating and adjusting the elevation requirements. Moreover, similar to the paper, we utilize various formulas and concepts (e.g., slope and acceleration of sea level rise) to calculate the buffer and freeboard heights. 
+    1. Multi-Objective Formulation:
+        1. The paper’s multi-objective approach aligns with this project’s goals of balancing trade-offs between different objectives (e.g., minimizing flood risk vs. minimizing costs).
+    1. Decision Robustness for Homeowners:
+        1. Just as the paper seeks robust solutions, this project also aims to provide better options for homeowners.
+        1. Robust elevation policies can:
+            1. Account for varying uncertain sea level rise scenarios.
+            1. Adapt buffer and freeboard heights as new information comes up.
+
+## [Dynamic adaptive policy pathways: A method for crafting robust decisions for a deeply uncertain world](https://doi.org/10.1016/j.gloenvcha.2012.12.006) 
+
+**Summary**
+
+1. The article introduces a novel approach to creating adaptable and resilient policy strategies in the face of deep uncertainties, particularly related to climate change. This method is known as Dynamic Adaptive Policy Pathways (DAPP). DAPP is designed to help policymakers develop strategies that remain viable under a range of future scenarios, ensuring flexibility and robustness against unforeseen changes.
+
+**Background and Motivation** 
+
+1. Traditional planning approaches struggle to address uncertainties related to global and regional changes (e.g., climate change, economic changes, and technological advancements).
+1. The article proposes an alternative approach that embraces uncertainty and allows for dynamic adaptation over time.
+    1. Concept of Deep Uncertainty:
+        1. These are situations where the future is unknown, and past data cannot reliably predict future conditions. This uncertainty is prevalent in issues like climate change, where the exact magnitude and location of impacts are difficult to predict due to complex system dynamics of the Earth and manmade systems.
+
+**Dynamic Adaptive Policy Pathways (DAPP)**
+
+![The Dynamic Adaptive Policy Pathways approach](DAPP.jpg)
+
+1. The DAPP method involves mapping out a series of potential decision pathways based on different scenarios that evolve over time. Each pathway represents a sequence of policy actions that can be adapted based on how the future plays out.
+1. DAPP combines two complementary approaches:
+    1. Adaptive Policymaking: This theoretical approach involves different types of actions (e.g., mitigating actions and hedging actions) and signposts to monitor whether adaptation is needed.
+    1. Adaptation Pathways: These pathways provide a framework for decision-making by considering multiple possible futures and adjusting policies accordingly.
+1. Overall, the DAPP method encourages planners to do the following:
+    1. Create a strategic vision of the future.
+    1. Commit to short-term actions.
+    1. Establish a flexible framework to guide future actions.
+    1. Continuously adapt the plan based on changing circumstances.
+1. Adaptation Tipping Points (ATPs):
+    1. The approach is grounded in identifying adaptation tipping points. These are thresholds where current policies will no longer meet the agreed objectives due to changing conditions. Recognizing these ATPs helps warn us when we need to switch from one policy pathway to another.
+    1. In other words, developing pathways involves creating a "pathway map" that illustrates sequential policy steps and potential future decisions. Moreover, this pathway map includes decision points that are linked to monitoring and triggers, which inform when a policy adjustment/shift is required, as mentioned above. 
+
+
+**Significance and Implications**
+
+1. The DAPP method provides a practical and effective way to navigate complex and uncertain decision-making environments.
+1. It emphasizes flexibility, learning, and adaptation rather than rigid long-term plans, which are relevant for various fields (e.g., environmental policy, infrastructure planning, and climate change risk management).
+1. The concept of Dynamic Adaptive Policy Pathways (DAPP) can be directly applied to my house elevation project, especially in managing the risks associated with sea level rise and storm damage. Here is how this approach can enhance decision-making and provide better options for homeowners through sequential analysis:
+    1. Sequential Analysis and Deep Uncertainty:
+        1. The paper emphasizes planning under deep uncertainty, which aligns with this project’s focus on sea level rise data and storm damage.
+        1. By considering these uncertainties, this project can create a dynamic framework that adapts over time as new information becomes available.
+        1. Sequential analysis allows this project to update decisions based on new states, which is essential for robust policy-making.
+    1. Buffer Heights and Adaptive Policymaking:
+        1. In this project, buffer heights are essential in protecting homes from floods and rising sea levels.
+        1. By applying adaptive policymaking principles, this project can:
+            1. Set short-term buffer height targets based on current data.
+            1. Continuously monitor sea level rise and storm damage.
+            1. Adjust buffer heights to maintain safety.
+            1. Consider different varying scenarios and adapt accordingly.
+    1. Freeboard Heights and Adaptation Pathways:
+        1. Freeboard heights are also crucial for resilience.
+        1. By applying adaptation pathways, this project can:
+            1. Develop multiple freeboard height options.
+            1. Evaluate their effectiveness under various sea level rise scenarios.
+            1. Choose pathways that balance risk reduction, cost, and feasibility.
+            1. Regularly reassess and adjust freeboard heights based on observed trends.
+    1. More Homeowner Options and Increased Robustness:
+        1. This project aims to provide better options for homeowners.
+        1. By incorporating dynamic adaptive pathways, this project enhances robustness of decisions:
+            1. Homeowners can choose from a range of elevation options.
+            1. Policies remain flexible, accommodating future and changing conditions.
+            1. Homeowners benefit from informed decisions that take into account uncertainties.
+1. In summary, the paper’s concepts—deep uncertainty, adaptive policymaking, and adaptation pathways—can help guide this project’s approach. 
+
+# Methodology
+
+{{< pagebreak >}}
+
+## Implementation
+
+You should make your modifications in either the `HouseElevation` or `ParkingGarage` module.
+1. I made a new file called project.qmd which combines elements from HouseElevation and concepts from ParkingGarage. I wanted to make a new file so I can have a reference in case something goes wrong (e.g., messing up a struct variable or redefining functions). 
+
+Include code snippets and explanations where necessary to clarify the implementation process.
+1. Code is below with explanations above each code block. 
+
+Detail the steps taken to implement the selected feature and integrate it into the decision-support tool.
+
+### Setup
+
+```{julia}
+using CSV
+using DataFrames
+using DataFramesMeta
+using Distributions
+using LaTeXStrings
+using Metaheuristics 
+using Plots
+using Random
+using Unitful
+
+using Revise
+using StatsBase
+using HouseElevation
+using Interpolations
+
+Plots.default(; margin=5Plots.mm)
+```
+
+ModelParamsSA contains all the variables that are constant across simulations. Differs from ModelParams
+
+```{julia}
+#| output: false
+#| echo: false
+@kwdef struct ModelParamsSA
+    house::House
+    years::Vector{Int}
+    buffer_height::Float64 # have to include variable for buffer height
+    freeboard_height::Float64 # have to include variable for freeboard height
+end
+```
+
+```{julia}
+#| output: false
+house = let
+    haz_fl_dept = CSV.read("data/haz_fl_dept.csv", DataFrame) # read in the file
+    desc = "one story, Contents, fresh water, short duration"
+    row = @rsubset(haz_fl_dept, :Description == desc)[1, :] # select the row I want
+    area = 500u"ft^2"
+    height_above_gauge = 12u"ft"
+    House(row; area=area, height_above_gauge=height_above_gauge, value_usd=250_000)
+end
+
+```
+
+Next we define how we will sample the states of the world. This section remains constant to provide comparable results with the original optimization problem. 
+
+```{julia}
+#| output: false
+slr_scenarios = let
+    df = CSV.read("data/slr_oddo.csv", DataFrame)
+    [Oddo17SLR(a, b, c, tstar, cstar) for (a, b, c, tstar, cstar) in eachrow(df)]
+end
+
+function draw_surge_distribution()
+    μ = rand(Normal(5, 1))
+    σ = rand(Exponential(1.25))
+    ξ = rand(Normal(0.1, 0.05))
+    return GeneralizedExtremeValue(μ, σ, ξ)
+end
+
+function draw_discount_rate()
+    return rand(Normal(0.05, 0.03))
+end
+
+function draw_sow()
+    slr = rand(slr_scenarios)
+    surge_params = draw_surge_distribution()
+    discount = draw_discount_rate()
+    return SOW(slr, surge_params, discount)
+end
+```
+
+Finally we can sample the SOWs. This section remains constant to provide comparable results with the original optimization problem. 
+
+```{julia}
+#| output: false
+Random.seed!(421521)
+N_SOW = 10_000
+N_SOW_opt = 100 # to start
+sows = [draw_sow() for _ in 1:N_SOW]
+sows_opt = first(sows, N_SOW_opt)
+```
+
+Include data from depthdamage.jl. This allows for the use of DepthDamageData parameter. This is a data structure or type that stores the depth-damage data, as well as any relevant metadata. This is extremely useful as the depths are stored in a complicated format (e.g., “ft04m” means -4 feet)
+
+```{julia}
+#| output: false
+include("HouseElevation/src/depthdamage.jl")
+```
+
+Define haz_fl_dept and obtain data from DepthDamageData with row from haz_fl_dept
+
+```{julia}
+#| output: false
+haz_fl_dept = CSV.read("data/haz_fl_dept.csv", DataFrame)
+demo_row = @rsubset(
+    haz_fl_dept, :Description == "one story, Contents, fresh water, short duration"
+)[
+    1, :,
+]
+dd = DepthDamageData(demo_row)
+```
+
+This function calculates the slope and acceleration of flood depth from haz_fl_dept data of the building. 
+
+```{julia}
+#| output: false
+function calculate_slope_acceleration(haz_fl_dept::DataFrame)
+    # Calculate the slope and acceleration of flood depth
+    flood_depths = haz_fl_dept[!, :ft01]
+    slope = mean(diff(flood_depths))
+    acceleration = mean(diff(diff(flood_depths)))
+    return slope, acceleration, flood_depths
+end
+```
+
+This function calculates damage using flood depth and the DepthDamageData parameter using linear interpolation. 
+
+```{julia}
+#| output: false
+function calculate_damage(dd::DepthDamageData, flood_depths::Vector{<:Number})
+    # Create an interpolation object based on dd.depths and dd.damages
+    interp = LinearInterpolation(dd.depths, dd.damages, extrapolation_bc=Flat())
+    
+    # Calculate damages for each flood depth
+    damages = interp.(flood_depths)
+    
+    return damages
+end
+```
+
+This function calculates the buffer height from depth damage, house value, and the slope and acceleration of sea level rise/flood depths. 
+
+```{mermaid}
+flowchart LR
+  A[Flood] --> B(House Damages)
+  B --> C{50% House Value}
+  C --> D[Yes]
+  C --> E[No]
+  D --> G[Store flood depth]
+  E --> F[Return largest flood depth]
+```
+
+This function follows the above flow diagram to collect data on the flood depth, which will be used to calculate the recommended buffer height. Basically, if flood damages exceed 50% of the house value, then that flood depth is stored for that year. However, if it does not exceed 50%, then the function just stores the largest flood depth from the dataset. 
+
+```{julia}
+#| output: false
+function calculate_buffer_height(dd::DepthDamageData, house_value::Float64, slope::Float64, acceleration::Float64, flood_depths::Vector{<:Number})
+
+    # Make slope and acceleration have units of ft/yr and ft/yr^2, respectively
+    slope = slope * u"ft/yr"
+    acceleration = acceleration * u"ft/yr^2"
+
+    # Define the damage threshold as 50% of the house value (FEMA)
+    damage_threshold = 0.5 * house_value
+
+    # The time period is 30 years, which is the same as the original optimization problem
+    t = (2083 - 2024) * u"yr"
+
+    # Calculate the change in flood depth due to the slope and acceleration. Used distance formula (assumption)
+    change_in_depth = slope*t + 0.5*acceleration*t^2
+
+    # Adjust the flood depths based on the change in depth calculated above
+    flood_depths = flood_depths .+ change_in_depth
+
+    # Calculate damages for the flood depth
+    damages = calculate_damage(dd, flood_depths)
+
+    # Find the flood depth at which the damage exceeds the damage threshold (50%)
+    for (flood_depth, damage) in zip(flood_depths, damages)
+        if damage >= damage_threshold
+            return flood_depth
+        end
+    end
+
+    # If no flood depth exceeds the damage threshold, return the maximum flood depth from the data given
+    return maximum(flood_depths)
+end
+
+```
+
+This calls the above functions to find buffer height. Freeboard height is set from historical data and guidance from [FEMA](https://www.fema.gov/case-study/home-above-rest-homeowner-city-galveston-elevates-home-12-feet). After Hurricane Ike, FEMA sent a forensic engineering team (a Mitigation Assessment Team [MAT]) to Galveston and the surrounding areas. The MAT recommended that houses be elevated 3 feet above the bare minimum required, which is the freeboard height for this project. 
+
+```{julia}
+#| output: false
+slope, acceleration, flood_depths = calculate_slope_acceleration(haz_fl_dept)
+flood_depths_ft = flood_depths .* u"ft"
+buffer_height = calculate_buffer_height(dd, Float64(250_000), slope, acceleration,flood_depths_ft)
+freeboard_height = 3*u"ft"
+```
+
+Calculate cost of elevating buffer and freeboard heights. Used prices from a local contractor called [EHM](https://ehmoftexas.com/house-elevation-cost/) using slab foundation cost estimates and the provided area of the house. Additionally, this code assumes that square footage is based on ground surface area, not height, as it will be the same cost to lift. 
+
+```{julia}
+#| output: false
+function cost_of_action(buffer_height,freeboard_height)
+    buffer_cost = buffer_height_free * 2625  # calculate additional cost based on buffer height
+    freeboard_cost = freeboard_height_free * 2625  # calculate additional cost based on freeboard height
+    return buffer_cost + freeboard_cost
+end
+```
+
+Set up somes values to use in later functions that require dimensionless values. 
+
+```{julia}
+#| output: false
+# Modify run_sim function to consider buffer height and freeboard height
+buffer_height_free = uconvert(u"ft", buffer_height) |> ustrip
+freeboard_height_free = uconvert(u"ft", freeboard_height) |> ustrip
+p = ModelParamsSA(; house=house, years=2024:2083, buffer_height=buffer_height_free, freeboard_height=freeboard_height_free)
+
+```
+
+Include data from run_sim.jl. This allows for the use of trapz function in run_sim.
+
+```{julia}
+#| output: false
+include("HouseElevation/src/run_sim.jl")
+```
+
+Redefine the run_sim function in run_sim.jl to include buffer and freeboard height costs
+
+```{julia}
+#| output: false
+function run_simulation(a::Action, sow::SOW, p::ModelParamsSA, buffer_height_free::Float64, freeboard_height_free::Float64)    
+    # first, we calculate the cost of elevating the house
+    construction_cost = elevation_cost(p.house, a.Δh_ft) + cost_of_action(buffer_height_free,freeboard_height_free)
+
+    # we don't need to recalculate the steps of the trapezoidal integral for each year
+    storm_surges_ft = range(
+        quantile(sow.surge_dist, 0.0005); stop=quantile(sow.surge_dist, 0.9995), length=130
+    )
+
+    eads = map(p.years) do year
+
+        # get the sea level for this year
+        slr_ft = sow.slr(year)
+
+        # Compute EAD using trapezoidal rule
+        pdf_values = pdf.(sow.surge_dist, storm_surges_ft) # probability of each
+        depth_ft_gauge = storm_surges_ft .+ slr_ft # flood at gauge
+        depth_ft_house = depth_ft_gauge .- (p.house.height_above_gauge_ft + a.Δh_ft) # flood @ house
+        damages_frac = p.house.ddf.(depth_ft_house) ./ 100 # damage
+        weighted_damages = damages_frac .* pdf_values # weighted damage
+        # Trapezoidal integration of weighted damages
+        ead = trapz(storm_surges_ft, weighted_damages) * p.house.value_usd
+    end
+
+    years_idx = p.years .- minimum(p.years)
+    discount_fracs = (1 - sow.discount_rate) .^ years_idx
+    ead_npv = sum(eads .* discount_fracs)
+    return -(ead_npv + construction_cost)
+end
+```
+
+### Optimization
+
+We next need an objective function.
+Recall that we want to _maximize_ NPV, but the optimization package we are using is set up to _minimize_.
+
+```{julia}
+#| output: false
+function objective_function(Δh::Vector{Float64})
+    a = Action(Δh[1])
+    npvs = [run_simulation(a, sow, p, p.buffer_height, p.freeboard_height) for sow in sows_opt]
+    return -mean(npvs)
+end
+
+```
+
+Since I'm using more SOWs here, I'll also increase the time limit for the optimization to three minutes.
+
+```{julia}
+#| output: false
+options = Options(; time_limit=180.0, f_tol_rel=10.0)
+```
+
+We have a single decision variable, the height of the house above the ground.
+This can be any real number between 0 and 14 feet.
+The `ECA` algorithm is suggested as a default, so we'll use that.
+
+{{< pagebreak >}}
+
+# Results
+
+```{julia}
+# Define the optimization problem
+bounds = boxconstraints(; lb=[0.0], ub=[14.0])
+
+# Define the algorithm
+algorithm = ECA(; options=options)
+
+# Optimize
+result2 = optimize(objective_function, bounds, algorithm)
+```
+
+```{julia}
+display(minimum(result2))
+display(minimizer(result2))
+```
+
+## Validation
+
+As we have seen in labs, mistakes are inevitable and can lead to misleading results.
+
+To minimize the risk of errors making their way into final results, it is essential to validate the implemented feature.
+
+Describe the validation techniques used to ensure the accuracy and reliability of your implemented feature.
+
+Discuss any challenges faced during the validation process and how they were addressed.
+
+In this case, we don't really _need_ optimization -- we can use brute force. We can compare by plotting the objective function for a range of elevations (from 0 to 14 ft) using all SOWs.
+
+```{julia}
+#| output: false
+elevations_try = 0:0.5:14
+actions_try = Action.(elevations_try)
+freeboard_height_free = float(freeboard_height_free)
+
+N_more = 500
+npvs_opt = [mean([run_simulation(a, sow, p, buffer_height_free, freeboard_height_free) for sow in sows_opt]) for a in actions_try]
+npvs_moore = [
+    mean([run_simulation(a, sow, p, buffer_height_free, freeboard_height_free) for sow in first(sows, N_more)]) for a in actions_try
+]
+```
+
+Here, I wanted to see if taking no action (e.g., not considering buffer and freeboard heights when elevating) would lead to less NPV or profit for the homeowner. This was a simple check which underscored that considering buffer and freeboard height can help homeowners prepare for future conditions and save money in terms of future flood damages. 
+
+```{julia}
+# Scenario with buffer and freeboard height
+buffer_height_free = float(buffer_height_free)
+freeboard_height_free = float(freeboard_height_free)
+action_optimal = Action(minimizer(result2)[1])
+npv_optimal = mean([run_simulation(action_optimal, sow, p, buffer_height_free, freeboard_height_free) for sow in sows_opt])
+
+# Scenario without buffer and freeboard height
+action_sea_level = Action(0)  # Assuming sea_level is defined
+npv_sea_level = mean([run_simulation(action_sea_level, sow, p, 0.0, 0.0) for sow in sows_opt])
+
+println("NPV with buffer and freeboard height: ", npv_optimal)
+println("NPV without buffer and freeboard height: ", npv_sea_level)
+```
+
+Now, I attempt to plot the aforementioned concepts of NPV with and without the buffer and freeboard heights.
+
+```{julia}
+#| output: false
+elevations_try = 0:0.5:14
+actions_try = fill(Action(0), length(elevations_try))
+
+N_more = 500
+npv_sea_level = [mean([run_simulation(a, sow, p, 0.0, 0.0) for sow in sows_opt]) for a in actions_try]
+npv_sea_level_moore = [
+    mean([run_simulation(a, sow, p, 0.0, 0.0) for sow in first(sows, N_more)]) for a in actions_try
+]
+```
+
+```{julia}
+plot(
+    elevations_try,
+    npvs_opt ./ 1000;
+    xlabel="Elevation [ft]",
+    ylabel="NPV [1000 USD]",
+    label="Adaptive Policy: First $(N_SOW_opt) SOWs",
+    marker=:circle,
+    guidefontsize=8,
+    legendfontsize=8
+
+)
+plot!(elevations_try, npvs_moore ./ 1000; label="Adaptive Policy: First $(N_more) SOWs", marker=:circle)
+
+plot!(elevations_try, npv_sea_level ./ 1000; label="Static Policy: First $(N_SOW_opt)", marker=:square)
+plot!(elevations_try, npv_sea_level_moore ./ 1000; label="Static Policy: First $(N_more)", marker=:square)
+vline!([minimizer(result2)]; label="Optimal", linestyle=:dash)
+```
+
+Key insights:
+
+1. Our optimization appears to be working well, and maximizes the blue curve as it should.
+1. There is a substantial difference between the blue and orange lines, indicating that using different SOWs (from the same distribution!) can make a big difference. Thus, the optimal elevation is highly sensitive to assumptions about the SOWs. 
+1. Going from zero (don't elevate) to a small elevation is always bad, as you gain little flood protection but have to pay the fixed costs of elevation
+1. Static policies (i.e., elevating once and/or not considering (changes in) buffer and freeboard hiehgts) are often not profitable as time goes on and higher elevations are needed. 
+1. Limitations: 
+    1. However, this static policy attempt is limited in its implementation. As this project does not have a static policy approach to how a homeowners or contractors may approach home elevations. In other words, action(0) is too simplistic. 
+
+The following functions attempt to perform a static policy of the above sequential analysis adaptive policy by changing the run_simulation to only make one elevation. However, as mentioned previously, this requires many more assumptions that downplay the validation process. In other words, additional real-world data and methodology by companies is required to see a possible method to apply a static policy without considering buffer heights and freeboard heights.  
+
+```julia
+#| output: false
+#| echo: false
+
+struct ActionTest{T<:Real}
+    Δh_ft::T
+    n_levels::Int
+end
+
+function ActionTest(Δh::T, n_levels::Int) where {T<:Unitful.Length}
+    Δh_ft = ustrip(u"ft", Δh)
+    return Action(Δh_ft, n_levels)
+end
+```
+
+```julia
+#| output: false
+function run_simulation_static(a::ActionTest, sow::SOW, p::ModelParamsSA, buffer_height_free::Float64, freeboard_height_free::Float64)    
+    # Create a copy of a
+    a_copy = deepcopy(a)
+
+    # first, we calculate the cost of elevating the house
+    construction_cost = elevation_cost(p.house, a_copy.Δh_ft) + cost_of_action(buffer_height_free,freeboard_height_free)
+
+    # Initialize the total EAD NPV
+    total_ead_npv = 0.0
+
+    for year in p.years
+        # Add n_levels in the first year
+        if year == 2024
+            a_copy.Δh_ft += a_copy.n_levels
+        end
+
+        # Do not recalculate the steps of the trapezoidal integral for each year
+        storm_surges_ft = range(
+            quantile(sow.surge_dist, 0.0005); stop=quantile(sow.surge_dist, 0.9995), length=130
+        )
+
+        # get the sea level for this year
+        slr_ft = sow.slr(year)
+        
+        # Compute EAD using trapezoidal rule
+        pdf_values = pdf.(sow.surge_dist, storm_surges_ft) # probability of each
+        depth_ft_gauge = storm_surges_ft .+ slr_ft # flood at gauge
+        depth_ft_house = depth_ft_gauge .- (p.house.height_above_gauge_ft + a_copy.Δh_ft) # flood @ house
+        damages_frac = p.house.ddf.(depth_ft_house) ./ 100 # damage
+        weighted_damages = damages_frac .* pdf_values # weighted damage
+        # Trapezoidal integration of weighted damages
+        ead = trapz(storm_surges_ft, weighted_damages) * p.house.value_usd
+
+        # Compute the EAD NPV for this year and add it to the total
+        ead_npv = -(ead + construction_cost)
+        total_ead_npv += ead_npv
+    end
+
+    return total_ead_npv
+end
+
+```
+
+
+```julia
+#| output: false
+
+function objective_function_static(Δh::Vector{Float64})
+    a = ActionTest(Δh[1], 2)  # Pass Δh as the first argument to ActionTest
+    npvs = [run_simulation_static(a, sow, p, 0.0, 0.0) for sow in sows_opt]
+    return -mean(npvs)
+end
+
+```
+
+We have a single decision variable, the height of the house above the ground.
+This can be any real number between 0 and 14 feet.
+The `ECA` algorithm is suggested as a default, so we'll use that.
+
+```julia
+# Optimize
+result3 = optimize(objective_function_static, bounds, algorithm)
+```
+
+This function attempts to use brute force to find an optimal buffer height, assuming a constant freeboard height set by Galveston. However, this function takes too long as the optimization for each buffer height takes around 1-2 minutes each. 
+
+```julia
+#| output: false
+# Define ranges for buffer and freeboard heights
+using Distributed
+using SharedArrays  # Add this line
+
+let 
+    x = range(0; stop = 100, length = 100)
+    npvs_array = SharedArray{Float64}(100)  # Initialize a 1D shared array for npvs
+    for i=1:100
+        slope, acceleration, flood_depths = calculate_slope_acceleration(haz_fl_dept)
+        flood_depths_ft = flood_depths .* u"ft"
+        buffer_height = Float64(i)*u"ft"
+        freeboard_height = 3.0*u"ft"
+
+        buffer_height_free = uconvert(u"ft", buffer_height) |> ustrip
+        freeboard_height_free = uconvert(u"ft", freeboard_height) |> ustrip
+        p = ModelParamsSA(; house=house, years=2024:2083, buffer_height=buffer_height_free, freeboard_height=freeboard_height_free)
+
+        bounds = boxconstraints(; lb=[0.0], ub=[14.0])
+        # Define the algorithm
+        algorithm = ECA(; options=options)
+        # Optimize
+        result3 = optimize(objective_function, bounds, algorithm)
+        action = Action(minimizer(result3)[1]) 
+        npvs = mean([run_simulation(action, sow, p, buffer_height_free, freeboard_height_free) for sow in sows_opt])
+        npvs_array[i] = npvs  # Store npvs value in the array
+    end 
+
+    plot(x, npvs_array, xlabel="Buffer Height", ylabel="NPV")  # Create a 2D plot
+end
+
+```
+## Discussion
+
+1. From the results of NPV with and without buffer and freeboard height, we can see that having an adaptive policy that considers buffer and freeboard height provides more benefits (i.e., higher NPV) that static policies that ignores buffer and freeboard height. 
+1. Thus, this project allows homeowners to not only 
+
+Provide sufficient detail to demonstrate how the implemented feature addresses the problem statement.
+
+{{< pagebreak >}}
+
+# Conclusions
+
+## Discussion
+
+Analyze the implications of your results for climate risk management.
+
+1. Overall Success
+    1. Apart from the limitations discussed in a later section, this project provides a foundational base for future work.
+    1. On a fundamental basis, this project showcases how adapative policies in sequential analysis provides better value for a property owner looking to elevate their property against sea level rise. As sea level rise remains uncertain in certain factors, calculating and utilizing buffer and freeboard heights provide an extra layer of safety for properties against flood damages. Moreover, constantly updating these heights as time goes on provides more accurate information for decision makers. 
+    1. From this, future projects can look into apply adaptive elevations that allow for property owners to increase heightenings when needed, instead of a static one-time elevation. 
+1. On a broader scale, this project has wide implications for sequential analysis and climate risk management, apart form elevating properties.  
+    1. Adaptive Decision-Making:
+        1. Real-Time Adaptation: By using sequential analysis, climate risk assessments can adapt in real time to changing conditions, allowing decision-makers to respond quickly to emerging risks, such as sea-level rise.
+        1. Dynamic Policies: Direct policy search enables the optimization of adaptive policies. For instance, adjusting buffer heights of coastal infrastructure based on observed sea-level trends ensures resilience against sea-level rise.
+        1. Adaptive Pathways: Sequential analysis identifies adaptive pathways. These pathways guide long-term planning, ensuring that climate risk management remains effective over time.
+    1. Resource Allocation and NPV:
+        1. Robust Decisions: Sequential analysis provides useful information on where to allocate resources. To illustrate, it can guide decisions on flood protection infrastructure, considering factors like asset vulnerability and climate projections. Moreover, integrating NPV calculations ensures that investments yield long-term benefits. 
+    1. Risk Communication and Stakeholder Engagement:
+        1. Transparent Risk Assessment: Sequential analysis provides a transparent process for assessing climate risks. From this, stakeholders and decision makers can understand how decisions are made and contribute to risk reduction strategies. In turn, direct policy search allows stakeholders to participate in policy optimization, enhancing the effectiveness of adaptation measures.
+    1. Trade-Offs and Uncertainties:
+        1. Balancing Trade-Offs: Climate risk management involves trade-offs, and sequential analysis helps weigh the costs and benefits of different adaptation options, considering uncertainties.
+        1. Uncertainty: Direct policy search can incorporate uncertainty estimates into decision-making. It accounts for variability in climate projections, economic factors, and technological advancements. Although this project does not dive deep into uncertainties of certain SOWs, this project's foundation allow for this future work to be done. 
+    1. Monitoring:
+        1. Monitoring and Feedback: Direct policy search requires ongoing monitoring. Regular feedback loops ensure that policies remain effective and can be adjusted as needed.
+1. In summary, integrating sequential analysis and direct policy search enhances climate risk management by enabling adaptive decision-making, optimizing resource allocation, engaging stakeholders, addressing uncertainties, and promoting long-term resilience. All in all, these implications contribute to building robust and sustainable communities in the face of severe climate change.
+
+Consider the context of the class themes and discuss how your findings contribute to the understanding of climate risk assessment.
+
+1. Climate Risk Assessment:
+    1. Climate risk assessments are essential for cities and communities to identify the likelihood of future climate change hazards and their potential impacts. 
+    1. Key components of a climate risk assessment include:
+        1. Understanding the city’s demographic, socio-economic, and environmental factors.
+        1. Analyzing historical climate data.
+        1. Examining and modeling climate change trends and future scenarios.
+        1. Mapping climate risks and vulnerabilities.
+        1. Identifying priority risks based on exposure and vulnerability.
+1. Sequential Analysis:
+    1. Sequential analysis refers to evaluating data or making decisions sequentially over time, often with limited resources or information available at each step.
+    1. In the context of climate risk assessment, sequential analysis can be applied to assess risks as they unfold, considering evolving climate conditions and their impacts.
+1. Direct Policy Search:
+    1. Direct policy search aims to find optimal policies by directly optimizing their parameters. It is particularly useful in complex reinforcement learning problems.
+    1. Classification-based optimization, a derivative-free framework, has shown effectiveness for non-convex optimization problems with many local optima2.
+    1. However, traditional classification-based optimization requires batch sampling of solutions, which may not align with the sequential nature of policy evaluation in reinforcement learning.
+1. Integration and Contributions:
+    1. Combining these concepts can enhance climate risk assessment:
+        1. Adaptive Risk Assessment: Sequential analysis allows for real-time adaptation to changing climate conditions. By updating risk assessments as new data becomes available, cities can make informed decisions.
+        1. Policy Optimization for Adaptation: Direct policy search can optimize adaptation strategies. For instance, it can help determine optimal buffer and freeboard heights for flood protection infrastructure.
+        1. NPV and Decision-Making: Considering net present value (NPV) in decision-making ensures robustness. Sequential analysis can guide adaptive investments, while direct policy search optimizes resource allocation.
+1. Practical Example:
+    1. Imagine a coastal city facing sea-level rise due to climate change. Sequential analysis monitors sea-level trends, storm surges, and asset vulnerabilities.
+    1. Direct policy search optimizes investment decisions:
+    1. Buffer heights for seawalls: Sequentially adjust buffer heights based on observed sea-level rise.
+    1. Freeboard requirements for buildings: Optimize building designs to withstand future flooding.
+    1. NPV calculations guide resource allocation: Invest in cost-effective measures with higher NPV.
+1. In summary, integrating sequential analysis and direct policy search enhances climate risk assessment by adapting to changing conditions, optimizing adaptation strategies, and ensuring robust decisions. By considering NPV, cities can prioritize investments that yield long-term benefits in the face of climate change
+
+Identify any limitations of your approach and suggest potential improvements for future work.
+
+1. Freeboard and Buffer Height Calculations
+    1. The Freeboard assumes a constant value of 3 feet, which may not be robust enought as conditions change. Finding a possible method to update freeboard height based on local conditions is essential to increase the robustness of the decision.
+    1. The cost of Buffer Height and Freeboard Height is assumed from a local contractor in Galveston based on the area of the house with some assumptions, mainly that square footage is based on ground surface area, not height. Collecting data from more local contractors will allow for a more accurate calculate of costs by averaging the prices offered by these contractors. 
+    1. The calculation of the slope and acceleration of sea level rise, which is used by the buffer height calculations, is based on a general distance equation. In other words, this is a best estimate for how the sea level will rise based on data from the haz_fl_dept data. Thus, future iterations may need to consider additional datasets in Galveston to obtain historical sea level rise's slope and acceleration data. 
+    1. The calculation of the buffer height from the flood depth relies on the damage threshold being 50% or greater than the house value. Thus, some flood depths that do not reach this damage threshold are ignored. However, these flood depths may be significant and be an issue for the property owner to continue operations or live in. Thus, future iterations may need to consider adapting this damage threshold based on a variety of factors that can change as conditions change (e.g., local sea level rise, current economic conditions, property owner preferences, etc.)
+
+1. Runtime
+    1. As the number of SOWs increase, the time to run the code exponentially increases. Future iterations should see how to optimize the code to decrease runtime. The current code is barebone and relies on many loops and repeats that may slow down the code. This is significant if we want to brute force the optimization to see if this project's feature is properly working. 
+
+1. Uncertainties in SOWs remain
+    1. As mentioned previously, there is a substantial difference between the blue and orange lines in the plot, indicating that using different SOWs (from the same distribution!) can make a big difference. 
+    1. Thus, the optimal elevation is highly sensitive to assumptions about the SOWs. 
+    1. Future iterations should consider how changing certain parameters of the SOWs can affect the results (i.e., perform a sensitivity analysis of the results). For example, how storm surge distributions are drawn, how discount rates are selected, and how states of the worlds are drawn from the dataset. 
+
+
+## Conclusions
+
+Summarize the key findings of your project and reiterate the significance of your implemented feature in addressing the problem statement.
+
+Overall, 
+
+Discuss the broader implications of your work for climate risk management and the potential for further research in this area.
+
+From this, 
+
+{{< pagebreak >}}
+
+# References
+
+:::{#refs}
+:::

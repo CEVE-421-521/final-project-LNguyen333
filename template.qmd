@@ -70,6 +70,19 @@ Explain how these articles contribute to the justification of your selected feat
 
 This is from @haasnootDynamicAdaptivePolicy2013a which is amazing
 
+![The Direct Policy Search Approach](DPS.jpg)
+1. dfasfsa
+    1. dfasd
+    1. dfasf
+
+1. dfdsafasf
+    1. daasfs
+
+
+1. Adaptive Decision-Making:
+    1. Real-Time Adaptation: By using sequential analysis, climate risk assessments can adapt in real time to changing conditions. This allows decision-makers to respond promptly to emerging risks, such as extreme weather events or sea-level rise.
+    1. Dynamic Policies: Direct policy search enables the optimization of adaptive policies. For instance, adjusting buffer heights for coastal infrastructure based on observed sea-level trends ensures resilience against rising waters.
+1. dfasdfasf
 
 
 # Methodology
@@ -106,9 +119,14 @@ Identify any limitations of your approach and suggest potential improvements for
 ## Conclusions
 
 Summarize the key findings of your project and reiterate the significance of your implemented feature in addressing the problem statement.
+
+1. abv
+
+  1. acb
+
 Discuss the broader implications of your work for climate risk management and the potential for further research in this area.
 
-
+{{< pagebreak >}}
 
 # References
 
