@@ -23,7 +23,7 @@ format:
        code-line-numbers: true
 
 date-format: "ddd., MMM. D"
-references: references.bib
+bibliography: references.bib
 
 # recommended, but not required
 # you will need jupyter-cache installed
@@ -80,7 +80,9 @@ Provide a brief overview of the theoretical background related to your chosen fe
 
 Cite at least two relevant journal articles to support your approach (see [Quarto docs](https://quarto.org/docs/authoring/footnotes-and-citations.html) for help with citations).
 
-## [Using direct policy search to identify robust strategies in adapting to uncertain sea-level rise and storm surge](https://doi.org/10.1016/j.envsoft.2018.05.006)
+## [Using direct policy search to identify robust strategies in adapting to uncertain sea-level rise and storm surge](https://doi.org/10.1016/j.envsoft.2018.05.006) 
+
+@garnerUsingDirectPolicy2018b
 
 **Summary**
 
@@ -123,6 +125,8 @@ The article explores how computational techniques can be utilized to create effe
             1. Adapt buffer and freeboard heights as new information comes up.
 
 ## [Dynamic adaptive policy pathways: A method for crafting robust decisions for a deeply uncertain world](https://doi.org/10.1016/j.gloenvcha.2012.12.006) 
+
+@haasnootDynamicAdaptivePolicy2013a
 
 **Summary**
 
@@ -184,9 +188,9 @@ The article explores how computational techniques can be utilized to create effe
             1. Homeowners benefit from informed decisions that take into account uncertainties.
 1. In summary, the paper’s concepts—deep uncertainty, adaptive policymaking, and adaptation pathways—can help guide this project’s approach. 
 
-# Methodology
-
 {{< pagebreak >}}
+
+# Methodology
 
 ## Implementation
 
@@ -660,10 +664,6 @@ end
 
 ```
 
-We have a single decision variable, the height of the house above the ground.
-This can be any real number between 0 and 14 feet.
-The `ECA` algorithm is suggested as a default, so we'll use that.
-
 ```julia
 # Optimize
 result3 = optimize(objective_function_static, bounds, algorithm)
@@ -704,12 +704,6 @@ let
 end
 
 ```
-## Discussion
-
-1. From the results of NPV with and without buffer and freeboard height, we can see that having an adaptive policy that considers buffer and freeboard height provides more benefits (i.e., higher NPV) that static policies that ignores buffer and freeboard height. 
-1. Thus, this project allows homeowners to not only 
-
-Provide sufficient detail to demonstrate how the implemented feature addresses the problem statement.
 
 {{< pagebreak >}}
 
@@ -721,8 +715,8 @@ Analyze the implications of your results for climate risk management.
 
 1. Overall Success
     1. Apart from the limitations discussed in a later section, this project provides a foundational base for future work.
-    1. On a fundamental basis, this project showcases how adapative policies in sequential analysis provides better value for a property owner looking to elevate their property against sea level rise. As sea level rise remains uncertain in certain factors, calculating and utilizing buffer and freeboard heights provide an extra layer of safety for properties against flood damages. Moreover, constantly updating these heights as time goes on provides more accurate information for decision makers. 
-    1. From this, future projects can look into apply adaptive elevations that allow for property owners to increase heightenings when needed, instead of a static one-time elevation. 
+    1. On a fundamental basis, this project showcases how adaptive policies in sequential analysis provide better value for a property owner looking to elevate their property against sea level rise. As sea level rise remains uncertain in certain factors, calculating and utilizing buffer and freeboard heights provide an extra layer of safety for properties against flood damages. Moreover, constantly updating these heights as time goes on provides more accurate information for decision makers. 
+    1. From this, future projects can look into applying adaptive elevations that allow property owners to increase heightenings when needed, instead of a static one-time elevation. 
 1. On a broader scale, this project has wide implications for sequential analysis and climate risk management, apart form elevating properties.  
     1. Adaptive Decision-Making:
         1. Real-Time Adaptation: By using sequential analysis, climate risk assessments can adapt in real time to changing conditions, allowing decision-makers to respond quickly to emerging risks, such as sea-level rise.
@@ -734,7 +728,7 @@ Analyze the implications of your results for climate risk management.
         1. Transparent Risk Assessment: Sequential analysis provides a transparent process for assessing climate risks. From this, stakeholders and decision makers can understand how decisions are made and contribute to risk reduction strategies. In turn, direct policy search allows stakeholders to participate in policy optimization, enhancing the effectiveness of adaptation measures.
     1. Trade-Offs and Uncertainties:
         1. Balancing Trade-Offs: Climate risk management involves trade-offs, and sequential analysis helps weigh the costs and benefits of different adaptation options, considering uncertainties.
-        1. Uncertainty: Direct policy search can incorporate uncertainty estimates into decision-making. It accounts for variability in climate projections, economic factors, and technological advancements. Although this project does not dive deep into uncertainties of certain SOWs, this project's foundation allow for this future work to be done. 
+        1. Uncertainty: Direct policy search can incorporate uncertainty estimates into decision-making. It accounts for variability in climate projections, economic factors, and technological advancements. Although this project does not dive deep into uncertainties of certain SOWs, this project's foundation allows for this future work to be done. 
     1. Monitoring:
         1. Monitoring and Feedback: Direct policy search requires ongoing monitoring. Regular feedback loops ensure that policies remain effective and can be adjusted as needed.
 1. In summary, integrating sequential analysis and direct policy search enhances climate risk management by enabling adaptive decision-making, optimizing resource allocation, engaging stakeholders, addressing uncertainties, and promoting long-term resilience. All in all, these implications contribute to building robust and sustainable communities in the face of severe climate change.
@@ -750,51 +744,51 @@ Consider the context of the class themes and discuss how your findings contribut
         1. Mapping climate risks and vulnerabilities.
         1. Identifying priority risks based on exposure and vulnerability.
 1. Sequential Analysis:
-    1. Sequential analysis refers to evaluating data or making decisions sequentially over time, often with limited resources or information available at each step.
-    1. In the context of climate risk assessment, sequential analysis can be applied to assess risks as they unfold, considering evolving climate conditions and their impacts.
+    1. Sequential analysis refers to evaluating data or making decisions sequentially over time, often with new resources or information available at each time step.
+    1. In the context of climate risk assessment, sequential analysis can be applied to assess risks as they unfold, considering evolving climate conditions and impacts.
 1. Direct Policy Search:
-    1. Direct policy search aims to find optimal policies by directly optimizing their parameters. It is particularly useful in complex reinforcement learning problems.
-    1. Classification-based optimization, a derivative-free framework, has shown effectiveness for non-convex optimization problems with many local optima2.
-    1. However, traditional classification-based optimization requires batch sampling of solutions, which may not align with the sequential nature of policy evaluation in reinforcement learning.
-1. Integration and Contributions:
+    1. Direct policy search finds optimal policies by directly optimizing their parameters. It is quite useful in complex reinforcement learning problems.
+    1. However, traditional classification-based optimization requires batch sampling of solutions, which is why DPS outperforms the traditional approach in terms of Pareto-dominance (e.g., balancing conflicting objectives).
+1. Combination:
     1. Combining these concepts can enhance climate risk assessment:
-        1. Adaptive Risk Assessment: Sequential analysis allows for real-time adaptation to changing climate conditions. By updating risk assessments as new data becomes available, cities can make informed decisions.
+        1. Adaptive Risk Assessment: Sequential analysis allows for real-time adaptation to changing climate conditions, updating risk assessments as new data becomes available.
         1. Policy Optimization for Adaptation: Direct policy search can optimize adaptation strategies. For instance, it can help determine optimal buffer and freeboard heights for flood protection infrastructure.
         1. NPV and Decision-Making: Considering net present value (NPV) in decision-making ensures robustness. Sequential analysis can guide adaptive investments, while direct policy search optimizes resource allocation.
 1. Practical Example:
-    1. Imagine a coastal city facing sea-level rise due to climate change. Sequential analysis monitors sea-level trends, storm surges, and asset vulnerabilities.
+    1. A coastal city facing sea-level rise due to climate change. 
+    1. Sequential analysis monitors sea-level trends, storm surges, exposure, and vulnerabilities.
     1. Direct policy search optimizes investment decisions:
     1. Buffer heights for seawalls: Sequentially adjust buffer heights based on observed sea-level rise.
     1. Freeboard requirements for buildings: Optimize building designs to withstand future flooding.
     1. NPV calculations guide resource allocation: Invest in cost-effective measures with higher NPV.
-1. In summary, integrating sequential analysis and direct policy search enhances climate risk assessment by adapting to changing conditions, optimizing adaptation strategies, and ensuring robust decisions. By considering NPV, cities can prioritize investments that yield long-term benefits in the face of climate change
+1. In summary, integrating sequential analysis with direct policy search enhances climate risk assessment by adapting to changing conditions, optimizing adaptation strategies, and ensuring robust decisions. By considering NPV, cities can prioritize investments and solutions that yield long-term benefits in the face of climate change
 
 Identify any limitations of your approach and suggest potential improvements for future work.
 
 1. Freeboard and Buffer Height Calculations
-    1. The Freeboard assumes a constant value of 3 feet, which may not be robust enought as conditions change. Finding a possible method to update freeboard height based on local conditions is essential to increase the robustness of the decision.
-    1. The cost of Buffer Height and Freeboard Height is assumed from a local contractor in Galveston based on the area of the house with some assumptions, mainly that square footage is based on ground surface area, not height. Collecting data from more local contractors will allow for a more accurate calculate of costs by averaging the prices offered by these contractors. 
+    1. The Freeboard assumes a constant value of 3 feet, which may not be robust enough as conditions change. Finding a possible method to update freeboard height based on local conditions is essential to increase the robustness of the decision.
+    1. The cost of Buffer Height and Freeboard Height is assumed from a local contractor in Galveston based on the area of the house with some assumptions, mainly that square footage is based on ground surface area, not height. Collecting data from more local contractors will allow for a more accurate calculation of costs by averaging the prices offered by these contractors. 
     1. The calculation of the slope and acceleration of sea level rise, which is used by the buffer height calculations, is based on a general distance equation. In other words, this is a best estimate for how the sea level will rise based on data from the haz_fl_dept data. Thus, future iterations may need to consider additional datasets in Galveston to obtain historical sea level rise's slope and acceleration data. 
     1. The calculation of the buffer height from the flood depth relies on the damage threshold being 50% or greater than the house value. Thus, some flood depths that do not reach this damage threshold are ignored. However, these flood depths may be significant and be an issue for the property owner to continue operations or live in. Thus, future iterations may need to consider adapting this damage threshold based on a variety of factors that can change as conditions change (e.g., local sea level rise, current economic conditions, property owner preferences, etc.)
-
 1. Runtime
-    1. As the number of SOWs increase, the time to run the code exponentially increases. Future iterations should see how to optimize the code to decrease runtime. The current code is barebone and relies on many loops and repeats that may slow down the code. This is significant if we want to brute force the optimization to see if this project's feature is properly working. 
-
+    1. As the number of SOWs increases, the time to run the code exponentially increases. Future iterations should see how to optimize the code to decrease runtime. The current code is barebone and relies on many loops and repeats that may slow down the code. This is significant if we want to brute force the optimization to see if this project's feature is properly working. 
 1. Uncertainties in SOWs remain
     1. As mentioned previously, there is a substantial difference between the blue and orange lines in the plot, indicating that using different SOWs (from the same distribution!) can make a big difference. 
     1. Thus, the optimal elevation is highly sensitive to assumptions about the SOWs. 
     1. Future iterations should consider how changing certain parameters of the SOWs can affect the results (i.e., perform a sensitivity analysis of the results). For example, how storm surge distributions are drawn, how discount rates are selected, and how states of the worlds are drawn from the dataset. 
 
-
 ## Conclusions
 
 Summarize the key findings of your project and reiterate the significance of your implemented feature in addressing the problem statement.
 
-Overall, 
+1. Overall, from this project, I have successfully laid a foundation for the implementation of sequential analysis with direct policy search to create an adaptive policy that updates buffer and freeboard heights based on exposure/vulnerabilities and sea level trends. From the results, we can see that property owners gain more benefits by utilizing adaptive policies to consider buffer and freeboard heights, reducing costs and increasing safety. From this, future iterations can improve upon and scale this model up to perform over neighborhoods and cities, which can help inform policy makers to see what regions require immediate elevations for existing structures and plan for adaptive structures that can make future elevations.
 
 Discuss the broader implications of your work for climate risk management and the potential for further research in this area.
 
-From this, 
+1. As stated before, integrating sequential analysis and direct policy search enhances climate risk management by enabling adaptive decision-making, optimizing resource allocation, engaging stakeholders, addressing uncertainties, and promoting long-term resilience. By considering NPV, cities can prioritize investments and solutions that yield long-term benefits in the face of climate change. All in all, these implications contribute to building robust and sustainable communities in the face of severe climate change. 
+1. Moreover, as this project lays the bare framework for sequential analysis, future research is required before real world applications. Namely, the collection and analysis of real-world data such as costs to elevate and sea level rise acceleration will be important. This can not only benefit house elevation problems but also other wider scale issues like infrastructure improvements and recovery of essential services (e.g., fire department) after storms to name a few.
+1. Moreover, for future additions to this project, analysis of how using buffer heights and freeboard heights can reduce storm damages to properties can help cement the utility of sequential analysis and adaptive policies. Apart from using models, real-world data can further help expand the benefits of sequential analysis to include decreasing storm damages, which in turn, will increase the NPV of elevating. 
+1. Lastly, once these techniques and methods have been fine-tuned, combining sequential analysis and direct policy search with machine learning techniques (e.g., deep reinforcement learning) can develop AI-driven decision support systems and increase efficiency for climate risk management.
 
 {{< pagebreak >}}
 
