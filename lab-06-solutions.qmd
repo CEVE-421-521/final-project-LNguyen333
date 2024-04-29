@@ -233,3 +233,4 @@ Key insights:
 1. There is a substantial difference between the blue and red lines, indicating that using different SOWs (from the same distribution!) can make a big difference
 1. Going from zero (don't elevate) to a small elevation is always bad, as you gain little flood protection but have to pay the fixed costs of elevation
 1. The optimal elevation is highly sensitive to assumptions about the SOWs
+

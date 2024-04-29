@@ -8,6 +8,9 @@ using StatsBase: mean
     years::Vector{Int}
 end
 
+
+
+
 """A SOW contains all the variables that may vary from one simulation to the next"""
 struct SOW{T<:Real}
     slr::Oddo17SLR # the parameters of sea-level rise

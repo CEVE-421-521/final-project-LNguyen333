@@ -1,6 +1,6 @@
 ---
-title: "Final Project Report"
-author: "Your Name (NetID)"
+title: "Final Project Report: Adding Sequential Analysis to the House Elevation Problem"
+author: "Leanh Nguyen (NetID)"
 jupyter: julia-1.10
 date: 2024-04-30
 
@@ -12,18 +12,18 @@ date: 2024-04-30
 # https://quarto.org/docs/reference/formats/docx.html
 
 format: 
-    pdf:
-        documentclass: article
-        fontsize: 11pt
-        geometry:
-            - margin=1in  
-        number-sections: true
-        code-line-numbers: true
-    # docx: 
-    #    toc: true
-    #    fig-format: png
-    #    number-sections: true
-    #    code-line-numbers: true
+    # pdf:
+    #     documentclass: article
+    #     fontsize: 11pt
+    #     geometry:
+    #         - margin=1in  
+    #     number-sections: true
+    #     code-line-numbers: true
+    docx: 
+       toc: true
+       fig-format: png
+       number-sections: true
+       code-line-numbers: true
 
 date-format: "ddd., MMM. D"
 
@@ -45,16 +45,32 @@ execute:
 Clearly define the problem statement that your chosen feature aims to address.
 Explain the significance of this problem in the context of climate risk management.
 
+With the recent federal infrastructure bill, American cities are set to spend billions to improve their water and flood systems among many others. However, with the growing concern on climate change's impact on infrastructure, climate risk management is coming into the spotlight for future urban planning. However, the question of how to approach climate change forecasts remains in the minds of many researchers. 
+
+In the case of a property elevation problem, we have a property owner that is threatened by sea level rise and wants to elevate their property. Ideally, they would like to minimize costs and maximize benefits (e.g., flood protection, human safety, etc.). A simple model could take the current state(s) of the world and a possible decision (i.e., how high to elevate the property) to generate a potential solution for the owner. 
+
+However, in the real world, most decisions made by regular people are not static, but rather sequential. In other words, people can hold off from making a decision once they have more information about the world and/or have enough resources to perform an action (e.g., elevating a building). In this case, at each time step, a property owner can make a decision based on the state of the system (e.g., current sea level, current flood distribution, cureent building elevation, etc.) which can change at each time step. Additionally, in the real world, the property owner would also get some immediate feedback or reward like the cost of flood insurane and the cost of elevating. 
+
+By applying sequential analysis, we can utilize an adaptive policy that allows the property owner to make more accurate decisions based on the current state of the world, which can reduce costs while maintain or improve overall benefits. From this, researchers can possibly scale this model up to perform over neighborhoods, cities, and regions which can help property owners make informed decisions on elevating and advice future construction to consider adaptive structures that allows for future modifications and/or elevations. 
+
 ## Selected Feature
 
 Describe the feature you have selected to add to the existing decision-support tool.
 Discuss how this feature relates to the problem statement and its potential to improve climate risk assessment.
+
+In this projedt 
 
 # Literature Review
 
 Provide a brief overview of the theoretical background related to your chosen feature.
 Cite at least two relevant journal articles to support your approach (see [Quarto docs](https://quarto.org/docs/authoring/footnotes-and-citations.html) for help with citations).
 Explain how these articles contribute to the justification of your selected feature.
+
+## [Using direct policy search to identify robust strategies in adapting to uncertain sea-level rise and storm surge](https://doi.org/10.1016/j.envsoft.2018.05.006)
+
+This is from @haasnootDynamicAdaptivePolicy2013a which is amazing
+
+
 
 # Methodology
 
@@ -91,6 +107,8 @@ Identify any limitations of your approach and suggest potential improvements for
 
 Summarize the key findings of your project and reiterate the significance of your implemented feature in addressing the problem statement.
 Discuss the broader implications of your work for climate risk management and the potential for further research in this area.
+
+
 
 # References
 
