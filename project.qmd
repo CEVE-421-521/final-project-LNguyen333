@@ -103,6 +103,7 @@ The article explores how computational techniques can be utilized to create effe
 1. Most importantly, the new formulation achieves high-quality solutions with lower computational demands compared to intertemporal optimization methods.
 
 **Significance and Implications**
+
 1. The study highlights the utility of multi-objective adaptive formulations for coastal adaptation.
 1. Decision makers can use this approach to craft robust strategies that adapt dynamically to changing conditions.
 1. The findings extend beyond coastal adaptation and have broader applications in climate change decision problems.
